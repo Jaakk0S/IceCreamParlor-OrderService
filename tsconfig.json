@@ -1,0 +1,21 @@
+// Visit https://aka.ms/tsconfig to read more about this file
+{
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    // Tell ts-node CLI to install the --loader automatically, explained below
+    "esm": true,
+    "compilerOptions": {
+      "module": "ESNext"
+    }
+  },
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": [
+      "DOM",
+      "ES2015"
+    ],
+    "target": "ES2015",
+    "allowSyntheticDefaultImports": true
+  }}
