@@ -1,7 +1,7 @@
 // @ts-check
 
 import logger from "pino";
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 
 const log = logger({
     timestamp: () => `,"time":"${dayjs().format()}"`
