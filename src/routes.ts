@@ -1,9 +1,9 @@
 // @ts-check
 
-import { Application, Request, Response, NextFunction } from "express";
+import { Application, Request, Response } from "express";
 import { validate } from "./validation/validateResource";
-import { placeOrderSchema } from "./validation/placeOrder.schema";
 import { orderStatusHandler, placeOrderHandler } from "./controllers/order.controller";
+import { placeOrderSchema } from "./validation/dtoSchemas";
 
 
 function routes(app: Application) {

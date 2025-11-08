@@ -9,6 +9,6 @@ export default {
     ...tsJestTransformCfg,
   },
   preset: "ts-jest",
-  globalSetup: "./test/integration/globalsetup.ts",
-  globalTeardown: "./test/integration/globalteardown.ts"
+  globalSetup: "./test/setup/globalsetup.ts",
+  globalTeardown: "./test/setup/globalteardown.ts"
 };

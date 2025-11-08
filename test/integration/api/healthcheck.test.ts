@@ -1,8 +1,8 @@
 // @ts-check
 
-import { describe, test, beforeAll, afterAll } from '@jest/globals';
+import { describe, test } from '@jest/globals';
 import request from "supertest";
-import { app } from "../../src/app";
+import { app } from "../../../src/app";
 
 describe ("GET /order/v1/healthcheck", () => {
     test("Should return 200", async () => {

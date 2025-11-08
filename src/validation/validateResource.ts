@@ -10,6 +10,6 @@ export const validate = (schema: ZodObject) => (req: Request, res: Response, nex
         });
         next();
     } catch (e) {
-        return res.status(400).send(e.errors);
+        res.status(400).send(e.errors);
     }
 };

@@ -1,15 +1,21 @@
 // @ts-check
 
-import { Sequelize } from "sequelize";
+import knex, { Knex } from "knex";
 
-// Jest doesn't support mocking ES6 modules, so we are using global variable for the connection
+let _connection:Knex;
 
-globalThis.__DB_CONNECTION__ = new Sequelize(
-    process.env['mysql_database'],
-    process.env['mysql_user'],
-    process.env['mysql_password'], {
-        host: process.env['mysql_host'],
-        port: +process.env['mysql_port'],
-        dialect: 'mysql'
-    }
-);   
+export const getDbConnection = ():Knex => {
+  if (!_connection) {
+    _connection = knex({
+      client: 'mysql2',
+      connection: {
+          host: process.env.mysql_host,
+          port: +process.env.mysql_port,
+          user: process.env.mysql_user,
+          password: process.env.mysql_password,
+          database: process.env.mysql_database,
+      }
+    });
+  }
+  return _connection;
+}
