@@ -15,7 +15,7 @@ export async function placeOrder(order: Order): Promise<Order> {
             order.products = JSON.stringify(values);
             order.createdAt = new Date().toISOString();
             order.updatedAt = new Date().toISOString();
-            getDbConnection()<Order>('ICECREAM_ORDER').insert(order).then(data => { // if the inserts fails
+            getDbConnection().insert(order).into('ICECREAM_ORDER').then(data => {
                 resolve(order); // return updated DAO
             }).catch(e => {
                 log.error(e.message);
@@ -29,12 +29,14 @@ export async function placeOrder(order: Order): Promise<Order> {
 }
 
 export async function getOrder(orderId: number): Promise<Order> {
-    console.log(orderId);
     return new Promise(function(resolve, reject) {
         getDbConnection().select().from<Order>('ICECREAM_ORDER').where('id', orderId).first().then((result:Order) => {
             if (result == undefined)
                 reject("Order not found");
             resolve(result);
+        }).catch(err => {
+            log.error(err);
+            reject(err);
         });
     });
 }

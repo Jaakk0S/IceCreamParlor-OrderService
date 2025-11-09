@@ -1,9 +1,10 @@
 // @ts-check
 
-import { shutdown } from "../../src/app";
+import { getDbConnection, killDbConnection } from "../../src/db/connection";
 
 export default async function globalTeardown() {
-    await globalThis.TestContainer.stop();
+    killDbConnection();
+    globalThis.TestContainer.stop();
     console.log("Test container stopped");
-    shutdown();
+    //shutdown();
 };

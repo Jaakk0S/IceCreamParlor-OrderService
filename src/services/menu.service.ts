@@ -4,7 +4,6 @@
     Menu service uses a REST client to communicate with the Menu API
 */
 
-import { rejects } from "assert";
 import log from "../utils/logger";
 import { ConeDAO, FlavorDAO, MenuDAO, ProductDAO, ToppingDAO } from "./daos/daos";
 
@@ -14,10 +13,13 @@ export async function menuApiGet(path: string, id: number): Promise<MenuDAO> {
     log.info(`Fetching ${url}`);
 
     return new Promise(async function(resolve, reject) {
-        await fetch(url).then(response => {
+        await fetch(url).then((response:Response) => {
             log.info('Response status: ' + response.status);
             response.json().then(val => {
                 resolve(val);
+            }).catch(e => {
+                log.error(e);
+                reject(e);
             });
         }).catch(err => {
             log.error('Fetch failed: ' + err);
@@ -56,6 +58,7 @@ export async function getProduct(product: ProductDAO): Promise<ProductDAO> {
         const cone:Promise<ConeDAO> = menuApiGet("admin/v1/cone", product.cone.id);
         const toppings:Promise<ToppingDAO[]> = getToppings(product.toppings.map((t: ToppingDAO) => t.id));
         Promise.all([flavor, cone, toppings]).then(values => {
+            product.name = "Custom";
             product.flavor = values[0];
             product.cone = values[1];
             product.toppings = values[2];

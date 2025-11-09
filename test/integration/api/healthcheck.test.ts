@@ -1,11 +1,11 @@
 // @ts-check
 
-import { describe, test } from '@jest/globals';
-import request from "supertest";
-import { app } from "../../../src/app";
+import { describe, jest, test } from '@jest/globals';
+import { createServer } from '../../../src/app';
+import supertest from 'supertest';
 
 describe ("GET /order/v1/healthcheck", () => {
     test("Should return 200", async () => {
-        const response = await request(app).get(`/order/v1/healthcheck`).expect(200);
+        await supertest(createServer()).get(`/order/v1/healthcheck`).expect(200);
     });
 });

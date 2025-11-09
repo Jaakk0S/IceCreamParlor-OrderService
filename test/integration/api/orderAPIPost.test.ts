@@ -1,10 +1,10 @@
 // @ts-check
 
-import { describe, test, beforeAll, afterAll, jest } from '@jest/globals';
-import request from "supertest";
-import { app } from "../../../src/app";
-import * as testData from "../../setup/generateTestData";
-import { initializeTestData } from '../../setup/initializeTestData';
+import { describe, test, jest } from '@jest/globals';
+import { initializeTestData, testCone, testFlavor, testProduct, testTopping } from '../../setup/testHelpers';
+import { createServer } from '../../../src/app';
+import supertest from 'supertest';
+import { killDbConnection } from '../../../src/db/connection';
 
 const mockFetch = (productFound:boolean, coneFound:boolean, flavorFound:boolean, toppingFound:boolean) => {
 
@@ -20,22 +20,22 @@ const mockFetch = (productFound:boolean, coneFound:boolean, flavorFound:boolean,
             if (url.includes("product")) {
                 if (!productFound)
                     reject("Product not found")
-                returnJson = testData.testProduct();
+                returnJson = testProduct();
             }
             else if (url.includes("cone")) {
                 if (!coneFound)
                     reject("Cone not found")
-                returnJson = testData.testCone();
+                returnJson = testCone();
             }
             else if (url.includes("flavor")) {
                 if (!flavorFound)
                     reject("Flavor not found")
-                returnJson = testData.testFlavor();
+                returnJson = testFlavor();
             }
             else if (url.includes("topping")) {
                 if (!toppingFound)
                     reject("Topping not found")
-                returnJson = testData.testTopping();
+                returnJson = testTopping();
             }
             else
                 returnJson = { id: 1234 };
@@ -54,27 +54,34 @@ const mockFetch = (productFound:boolean, coneFound:boolean, flavorFound:boolean,
 describe ("POST /order/v1/place", () => {
     
     beforeEach(async () => {
-        jest.resetAllMocks();
         await initializeTestData();
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+
+    afterAll(() => {
+        killDbConnection();
     });
     
     test("Should return 400 with missing body", async () => {
-        await request(app).post(`/order/v1/place`).expect(400);
+        await supertest(createServer()).post(`/order/v1/place`).expect(400);
     });
 
     test("Should return 400 with an invalid JSON body", async () => {
         const payload = { "lala" : "lalala" };
-        await request(app).post(`/order/v1/place`).send(payload).expect(400);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(400);
     });
 
     test("Should return 400 with a missing customer name", async () => {
         const payload = { "products" : [{ "id" : 123 }]};
-        await request(app).post(`/order/v1/place`).send(payload).expect(400);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(400);
     });
 
     test("Should return 400 with missing products", async () => {
         const payload = { "customer_name" : "John Doe" };
-        await request(app).post(`/order/v1/place`).send(payload).expect(400);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(400);
     });
 
     test("Should return 409 with a valid order of ids, but some product id not found in menu", async () => {
@@ -83,7 +90,7 @@ describe ("POST /order/v1/place", () => {
             "customer_name" : "Katy Perry",
             "products" : [{ "id" : 123 }, { "id" : 124 }]
         };
-        await request(app).post(`/order/v1/place`).send(payload)
+        await supertest(createServer()).post(`/order/v1/place`).send(payload)
             .expect(409)
             .catch(e => console.log(e.message));
     });
@@ -94,7 +101,7 @@ describe ("POST /order/v1/place", () => {
             "customer_name" : "Katy Perry",
             "products" : [{ "id" : 123 }, { "id" : 124 }]
         };
-        await request(app).post(`/order/v1/place`).send(payload).expect(201);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(201);
     });
 
     test("Should return 400 where cone is missing", async () => {
@@ -106,7 +113,7 @@ describe ("POST /order/v1/place", () => {
                 }
             ]
         };
-        await request(app).post(`/order/v1/place`).send(payload).expect(400);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(400);
     });
 
     test("Should return 400 where flavor is missing", async () => {
@@ -118,7 +125,7 @@ describe ("POST /order/v1/place", () => {
                 }
             ]
         };
-        await request(app).post(`/order/v1/place`).send(payload).expect(400);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(400);
     });
 
     test("Should return 409 where cone id not found in menu", async () => {
@@ -132,7 +139,7 @@ describe ("POST /order/v1/place", () => {
                 }
             ]
         };
-        await request(app).post(`/order/v1/place`).send(payload).expect(409);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(409);
     });
 
     test("Should return 409 where flavor id not found in menu", async () => {
@@ -146,7 +153,7 @@ describe ("POST /order/v1/place", () => {
                 }
             ]
         };
-        await request(app).post(`/order/v1/place`).send(payload).expect(409);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(409);
     });
 
     test("Should return 409 where a topping id not found in menu", async () => {
@@ -161,7 +168,7 @@ describe ("POST /order/v1/place", () => {
                 }
             ]
         };
-        await request(app).post(`/order/v1/place`).send(payload).expect(409);
+        await supertest(createServer()).post(`/order/v1/place`).send(payload).expect(409);
     });
 
 });

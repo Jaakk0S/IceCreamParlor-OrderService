@@ -7,3 +7,5 @@ export const tableCreate = "CREATE TABLE ICECREAM_ORDER (\
         updatedAt VARCHAR(50) NOT NULL);";
 
 export const tableDrop = "DROP TABLE IF EXISTS ICECREAM_ORDER;"
+
+export const resetAutoIncrement = "ALTER TABLE ICECREAM_ORDER AUTO_INCREMENT = 1";
