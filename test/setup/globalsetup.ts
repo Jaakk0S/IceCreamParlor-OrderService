@@ -7,7 +7,7 @@ import { tableCreate } from "../../src/db/iceCreamOrder.sql";
 const MYSQL_DOCKER_IMAGE = "mysql:9.5.0";
 
 export default async function globalSetup() {
-    if (process.env.orderservice_spinup_test_container) {
+    if (process.env.orderservice_spinup_test_container == "true") {
         console.log("Starting MySQL test container");
         let container = await new MySqlContainer(MYSQL_DOCKER_IMAGE).start();
         globalThis.TestContainer = container;
