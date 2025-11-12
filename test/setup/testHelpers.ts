@@ -16,10 +16,6 @@ delete initialOrder.id;
 
 export const initializeTestData = async () => {
 
-    if (!globalThis.TestContainer) {
-        throw new Error("Test container needs to be running");
-    }
-
     iconv.encodingExists('cesu8'); // Manually early-load NodeJS cesu8 encoding for Jest
     
     await getDbConnection()("ICECREAM_ORDER").truncate().then(r => {
