@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "better-npm-run dev",
-    "test": "better-npm-run test"
+    "test": "better-npm-run test",
+    "test-nopretty": "better-npm-run test-nopretty"
   },
   "betterScripts": {
     "dev": {
@@ -16,6 +17,12 @@
     },
     "test": {
       "command": "jest --runInBand | pino-pretty",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    "test-nopretty": {
+      "command": "jest --runInBand",
       "env": {
         "NODE_ENV": "test"
       }
