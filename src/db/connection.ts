@@ -6,8 +6,8 @@ let _connection:Knex;
 
 export const getDbConnection = ():Knex => {
   if (!_connection) {
-    
-    if (process.env.NODE_ENV == "test" && !globalThis.TestContainer)
+
+    if (process.env.orderservice_spinup_test_container == "true" && process.env.NODE_ENV == "test" && !globalThis.TestContainer)
       throw new Error("Test environment needs to have a test container running before creating Knex");
 
     _connection = knex({
