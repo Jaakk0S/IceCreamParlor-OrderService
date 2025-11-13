@@ -3,10 +3,12 @@
 import { MySqlContainer } from "@testcontainers/mysql";
 import { getDbConnection } from "../../src/db/connection";
 import { tableCreate } from "../../src/db/iceCreamOrder.sql";
+import dotenv from "dotenv";
 
 const MYSQL_DOCKER_IMAGE = "mysql:9.5.0";
 
 export default async function globalSetup() {
+    dotenv.config();
     if (process.env.orderservice_spinup_test_container == "true") {
         console.log("Starting MySQL test container");
         let container = await new MySqlContainer(MYSQL_DOCKER_IMAGE).start();

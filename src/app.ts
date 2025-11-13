@@ -3,8 +3,10 @@
 import express, { Application } from "express";
 import log from "./utils/logger";
 import routes from "./routes"
+import dotenv from "dotenv";
 
 export const createServer = () => {
+  dotenv.config();
   //I reccomend doing a console.log as well to make sure the names match*
   console.log(`./.env.${process.env.NODE_ENV}`)
 
