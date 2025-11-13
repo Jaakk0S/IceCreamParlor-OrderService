@@ -5,7 +5,6 @@ import knex, { Knex } from "knex";
 let _connection:Knex;
 
 export const getDbConnection = ():Knex => {
-    console.log(process.env);
   if (!_connection) {
 
     if (process.env.orderservice_spinup_test_container == "true" && process.env.NODE_ENV == "test" && !globalThis.TestContainer)
