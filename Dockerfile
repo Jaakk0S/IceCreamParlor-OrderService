@@ -20,10 +20,7 @@ RUN npm run build
 
 FROM build AS production
 
-# replace src and bin with those under dist
 RUN rm -rf dist/test
 RUN rm -rf src test bin
-RUN mv dist/src ./src
-RUN mv dist/bin ./bin
 
 CMD ["npm","start"]

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { getDbConnection, killDbConnection } from "../../src/db/connection";
+import { getDbConnection, killDbConnection } from "#src/db/connection";
 
 export default async function globalTeardown() {
     killDbConnection();

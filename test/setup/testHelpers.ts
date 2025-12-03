@@ -1,9 +1,9 @@
-import { Order } from "../../src/db/models";
-import { getDbConnection } from "../../src/db/connection";
-import { resetAutoIncrement } from "../../src/db/iceCreamOrder.sql";
-import * as models from "../../src/db/models"
+import { Order } from "#src/db/models";
+import { getDbConnection } from "#src/db/connection";
+import { resetAutoIncrement } from "#src/db/iceCreamOrder.sql";
+import { ConeDAO, FlavorDAO, ProductDAO, ToppingDAO } from "#src/services/daos/daos";
+import * as models from "#src/db/models"
 import iconv from 'iconv-lite';
-import { ConeDAO, FlavorDAO, ProductDAO, ToppingDAO } from "../../src/services/daos/daos";
 
 let orderId = 1;
 let productId = 1;
@@ -17,22 +17,22 @@ delete initialOrder.id;
 export const initializeTestData = async () => {
 
     iconv.encodingExists('cesu8'); // Manually early-load NodeJS cesu8 encoding for Jest
-    
+
     await getDbConnection()("ICECREAM_ORDER").truncate().then(r => {
         console.log("Test tables truncated");
     });
     await getDbConnection().raw(resetAutoIncrement).then(r => {
         console.log("Auto increment reset");
-    });        
+    });
     await getDbConnection()<Order>('ICECREAM_ORDER').insert(initialOrder).then(r2 => {
         console.log("Test data inserted");
     });
 };
 
-export const genericFetchMock = (product:ProductDAO, cone:ConeDAO, flavor:FlavorDAO, topping: ToppingDAO) => {
-    global.fetch = jest.fn((url:string) => {
+export const genericFetchMock = (product: ProductDAO, cone: ConeDAO, flavor: FlavorDAO, topping: ToppingDAO) => {
+    global.fetch = jest.fn((url: string) => {
 
-        let returnJson:object;
+        let returnJson: object;
 
         // fetch() will return test json based on url
 
@@ -47,8 +47,8 @@ export const genericFetchMock = (product:ProductDAO, cone:ConeDAO, flavor:Flavor
         else
             returnJson = { id: 1234 };
 
-        return new Promise(function(resolve, reject) {
-            const response:any = {
+        return new Promise(function (resolve, reject) {
+            const response: any = {
                 json: () => Promise.resolve(returnJson),
                 ok: true,
                 status: 200

@@ -1,8 +1,8 @@
 // @ts-check
 
 import { MySqlContainer } from "@testcontainers/mysql";
-import { getDbConnection } from "../../src/db/connection";
-import { tableCreate } from "../../src/db/iceCreamOrder.sql";
+import { getDbConnection } from "#src/db/connection";
+import { tableCreate } from "#src/db/iceCreamOrder.sql";
 import dotenv from "dotenv";
 
 const MYSQL_DOCKER_IMAGE = "mysql:9.5.0";
