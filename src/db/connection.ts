@@ -1,10 +1,10 @@
 // @ts-check
 
-import knex, { Knex } from "knex";
+import knex from "knex";
 
-let _connection:Knex;
+let _connection: knex.Knex;
 
-export const getDbConnection = ():Knex => {
+export const getDbConnection = (): knex.Knex => {
   if (!_connection) {
 
     if (process.env.orderservice_spinup_test_container == "true" && process.env.NODE_ENV == "test" && !globalThis.TestContainer)
@@ -13,11 +13,11 @@ export const getDbConnection = ():Knex => {
     _connection = knex({
       client: 'mysql2',
       connection: {
-          host: process.env.mysql_host,
-          port: +process.env.mysql_port,
-          user: process.env.mysql_user,
-          password: process.env.mysql_password,
-          database: process.env.mysql_database,
+        host: process.env.mysql_host,
+        port: +process.env.mysql_port,
+        user: process.env.mysql_user,
+        password: process.env.mysql_password,
+        database: process.env.mysql_database,
       },
       //debug: true
     });
@@ -28,8 +28,8 @@ export const getDbConnection = ():Knex => {
 
 export const killDbConnection = () => {
   if (_connection) {
-      _connection.destroy();
-      _connection = null;
+    _connection.destroy();
+    _connection = null;
   }
 };
 

@@ -1,16 +1,15 @@
-// @ts-check
-
-import express, { Application } from "express";
-import log from "./utils/logger";
-import routes from "./routes"
+import express from "express";
 import dotenv from "dotenv";
+import log from "#src/utils/logger";
+import routes from "#src/routes"
 
-export const createServer = () => {
+export const createServer = (): express.Application => {
   dotenv.config();
-  //I reccomend doing a console.log as well to make sure the names match*
+
+  // Log NODE_ENV to console
   console.log(`./.env.${process.env.NODE_ENV}`)
 
-  const app:Application = express();
+  const app: express.Application = express();
 
   app
     .disable("x-powered-by")
@@ -35,7 +34,7 @@ export const startServer = () => {
 export const shutdown = () => {
   console.log("Shutting down...");
   if (globalThis.Server) {
-    globalThis.Server.close((error:Error) => {
+    globalThis.Server.close((error: Error) => {
       console.log("Server closed. Cleanup complete.");
       //process.exit(0);
     });

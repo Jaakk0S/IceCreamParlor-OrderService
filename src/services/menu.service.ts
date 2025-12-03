@@ -4,16 +4,16 @@
     Menu service uses a REST client to communicate with the Menu API
 */
 
-import log from "../utils/logger";
-import { ConeDAO, FlavorDAO, MenuDAO, ProductDAO, ToppingDAO } from "./daos/daos";
+import log from "#src/utils/logger";
+import * as daos from "#src/services/daos/daos";
 
-export async function menuApiGet(path: string, id: number): Promise<MenuDAO> {
-    const { menuservice_host, menuservice_port} = process.env;
+export async function menuApiGet(path: string, id: number): Promise<daos.MenuDAO> {
+    const { menuservice_host, menuservice_port } = process.env;
     const url = `http://${menuservice_host}:${menuservice_port}/${path}/${id}`;
     log.info(`Fetching ${url}`);
 
-    return new Promise(async function(resolve, reject) {
-        await fetch(url).then((response:Response) => {
+    return new Promise(async function (resolve, reject) {
+        await fetch(url).then((response: Response) => {
             log.info('Response status: ' + response.status);
             response.json().then(val => {
                 resolve(val);
@@ -28,9 +28,9 @@ export async function menuApiGet(path: string, id: number): Promise<MenuDAO> {
     });
 }
 
-export async function getToppings(ids: number[]): Promise<ToppingDAO[]> {
-    const toppings:Promise<ToppingDAO>[] = ids.map(id => menuApiGet("admin/v1/topping", id));
-    return new Promise(async function(resolve, reject) {
+export async function getToppings(ids: number[]): Promise<daos.ToppingDAO[]> {
+    const toppings: Promise<daos.ToppingDAO>[] = ids.map(id => menuApiGet("admin/v1/topping", id));
+    return new Promise(async function (resolve, reject) {
         Promise.all(toppings).then((values) => {
             resolve(values);
         }).catch(e => {
@@ -40,10 +40,10 @@ export async function getToppings(ids: number[]): Promise<ToppingDAO[]> {
     });
 }
 
-export async function getProduct(product: ProductDAO): Promise<ProductDAO> {
+export async function getProduct(product: daos.ProductDAO): Promise<daos.ProductDAO> {
 
     // If the product object has an id, then fetch a product based on that id
-    
+
     if (product.id) {
         return menuApiGet("admin/v1/product", product.id);
     }
@@ -53,10 +53,10 @@ export async function getProduct(product: ProductDAO): Promise<ProductDAO> {
     if (!product.toppings)
         product.toppings = [];
 
-    return new Promise(async function(resolve, reject) {
-        const flavor:Promise<FlavorDAO> = menuApiGet("admin/v1/flavor", product.flavor.id);
-        const cone:Promise<ConeDAO> = menuApiGet("admin/v1/cone", product.cone.id);
-        const toppings:Promise<ToppingDAO[]> = getToppings(product.toppings.map((t: ToppingDAO) => t.id));
+    return new Promise(async function (resolve, reject) {
+        const flavor: Promise<daos.FlavorDAO> = menuApiGet("admin/v1/flavor", product.flavor.id);
+        const cone: Promise<daos.ConeDAO> = menuApiGet("admin/v1/cone", product.cone.id);
+        const toppings: Promise<daos.ToppingDAO[]> = getToppings(product.toppings.map((t: daos.ToppingDAO) => t.id));
         Promise.all([flavor, cone, toppings]).then(values => {
             product.name = "Custom";
             product.flavor = values[0];

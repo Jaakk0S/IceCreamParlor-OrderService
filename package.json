@@ -3,14 +3,24 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
+  "imports": {
+    "#root/*": "./*.ts",
+    "#src/*": "./src/*.ts",
+    "#test/*": "./test/*.ts",
+    "#prod_root/*": "./dist/*.js",
+    "#prod_src/*": "./src/dist/*.js",
+    "#prod_test/*": "./test/dist/*.js"
+  },
   "scripts": {
     "dev": "better-npm-run dev",
     "test": "better-npm-run test",
-    "test-nopretty": "better-npm-run test-nopretty"
+    "test-nopretty": "better-npm-run test-nopretty",
+    "build": "tsc",
+    "start": "better-npm-run prod"
   },
   "betterScripts": {
     "dev": {
-      "command": "tsx src/app.ts | pino-pretty",
+      "command": "ts-node-esm ./bin/www.ts | pino-pretty",
       "env": {
         "NODE_ENV": "dev"
       }
@@ -26,6 +36,12 @@
       "env": {
         "NODE_ENV": "test"
       }
+    },
+    "prod": {
+      "command": "node ./bin/www",
+      "env": {
+        "NODE_ENV": "prod"
+      }
     }
   },
   "dependencies": {
@@ -34,7 +50,7 @@
     "dayjs": "1.11.19",
     "debug": "4.4.3",
     "dotenv": "17.2.3",
-    "express": "5.1.0",
+    "express": "5.2.1",
     "http-errors": "2.0.0",
     "knex": "3.1.0",
     "mysql": "2.18.1",
@@ -51,13 +67,14 @@
     "@types/mysql": "2.15.27",
     "@types/node": "24.10.0",
     "@types/supertest": "6.0.3",
-    "jest": "30.2.0",
     "iconv-lite": "0.7.0",
+    "jest": "30.2.0",
     "pino-pretty": "13.1.2",
     "supertest": "7.1.4",
     "testcontainers": "11.7.2",
     "ts-jest": "29.4.5",
     "ts-node": "10.9.2",
+    "ts-node-dev": "2.0.0",
     "tsx": "4.20.6"
   }
 }
