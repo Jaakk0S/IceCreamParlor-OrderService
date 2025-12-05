@@ -1,4 +1,7 @@
-FROM node:20.19.6-trixie-slim AS base
+FROM alpine:latest AS base
+
+RUN apk add --no-cache nodejs && apk add --no-cache npm && rm -rf /var/cache/apk/*
+
 WORKDIR /app
 COPY ./ ./
 

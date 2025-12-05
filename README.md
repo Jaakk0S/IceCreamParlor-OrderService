@@ -13,18 +13,23 @@ This NodeJS microservice implements the *Order API* of Ice-Cream Parlor demo app
 - Jest - Test framework
 - Supertest - HTTP API test automation
 
+## Running Tests
+
+Tests are integration tests for the REST API and service layer.
+
+1. Have npm installed
+2. *npm run clean* (dist directory must not exist)
+3. *npm run test*
+
+Integration tests are run using an ad-hoc MySQL container.
+
 ## Building
 
 Run
 
 ```
-build
+./build
 ```
 
-This will run tests, then build the app and wrap it in a Docker container.
+This will produce the Docker image *icecreamparlor-orderservice*.
 
-By default, tests are run against an ad-hoc mysql service. Look into *.env* to find the mysql config. To use an existing mysql service, override *orderservice_spinup_test_container* to *false* and override the mysql params.
-
-## Additional points
-- A test container with MySQL 9 spins up at the start of tests
-- Tests are integration tests for the REST API and service layer
