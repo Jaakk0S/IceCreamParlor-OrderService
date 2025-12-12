@@ -29,7 +29,7 @@ export async function menuApiGet(path: string, id: number): Promise<daos.MenuDAO
 }
 
 export async function getToppings(ids: number[]): Promise<daos.ToppingDAO[]> {
-    const toppings: Promise<daos.ToppingDAO>[] = ids.map(id => menuApiGet("admin/v1/topping", id));
+    const toppings: Promise<daos.ToppingDAO>[] = ids.map(id => menuApiGet("menu/v1/topping", id));
     return new Promise(async function (resolve, reject) {
         Promise.all(toppings).then((values) => {
             resolve(values);
@@ -45,7 +45,7 @@ export async function getProduct(product: daos.ProductDAO): Promise<daos.Product
     // If the product object has an id, then fetch a product based on that id
 
     if (product.id) {
-        return menuApiGet("admin/v1/product", product.id);
+        return menuApiGet("menu/v1/product", product.id);
     }
 
     // Otherwise, fetch and populate each product component separately, based on their ids
@@ -54,8 +54,8 @@ export async function getProduct(product: daos.ProductDAO): Promise<daos.Product
         product.toppings = [];
 
     return new Promise(async function (resolve, reject) {
-        const flavor: Promise<daos.FlavorDAO> = menuApiGet("admin/v1/flavor", product.flavor.id);
-        const cone: Promise<daos.ConeDAO> = menuApiGet("admin/v1/cone", product.cone.id);
+        const flavor: Promise<daos.FlavorDAO> = menuApiGet("menu/v1/flavor", product.flavor.id);
+        const cone: Promise<daos.ConeDAO> = menuApiGet("menu/v1/cone", product.cone.id);
         const toppings: Promise<daos.ToppingDAO[]> = getToppings(product.toppings.map((t: daos.ToppingDAO) => t.id));
         Promise.all([flavor, cone, toppings]).then(values => {
             product.name = "Custom";

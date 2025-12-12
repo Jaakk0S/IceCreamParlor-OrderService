@@ -4,6 +4,7 @@ import { resetAutoIncrement } from "#src/db/iceCreamOrder.sql";
 import { ConeDAO, FlavorDAO, ProductDAO, ToppingDAO } from "#src/services/daos/daos";
 import * as models from "#src/db/models"
 import iconv from 'iconv-lite';
+import log from "#root/src/utils/logger";
 
 let orderId = 1;
 let productId = 1;
@@ -19,13 +20,13 @@ export const initializeTestData = async () => {
     iconv.encodingExists('cesu8'); // Manually early-load NodeJS cesu8 encoding for Jest
 
     await getDbConnection()("ICECREAM_ORDER").truncate().then(r => {
-        console.log("Test tables truncated");
+        log.info("Test tables truncated");
     });
     await getDbConnection().raw(resetAutoIncrement).then(r => {
-        console.log("Auto increment reset");
+        log.info("Auto increment reset");
     });
     await getDbConnection()<Order>('ICECREAM_ORDER').insert(initialOrder).then(r2 => {
-        console.log("Test data inserted");
+        log.info("Test data inserted");
     });
 };
 

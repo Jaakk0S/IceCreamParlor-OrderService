@@ -11,7 +11,7 @@
     "#prod_src/*": "./dist/src/*.js"
   },
   "scripts": {
-    "clean" : "rm -rf dist",
+    "clean": "rm -rf dist",
     "dev": "better-npm-run dev",
     "test": "better-npm-run test",
     "test-nopretty": "better-npm-run test-nopretty",
@@ -47,6 +47,7 @@
   "dependencies": {
     "assert": "2.1.0",
     "better-npm-run": "0.1.1",
+    "cors": "2.8.5",
     "dayjs": "1.11.19",
     "debug": "4.4.3",
     "dotenv": "17.2.3",
@@ -56,12 +57,15 @@
     "mysql": "2.18.1",
     "mysql2": "3.15.3",
     "pino": "10.1.0",
+    "rabbitmq-client": "5.0.8",
     "test": "3.3.0",
     "typescript": "5.9.3",
-    "zod": "4.1.12"
+    "zod": "4.1.12",
+    "zod-validation-error": "5.0.0"
   },
   "devDependencies": {
     "@testcontainers/mysql": "11.7.2",
+    "@types/cors": "2.8.19",
     "@types/express": "5.0.5",
     "@types/jest": "30.0.0",
     "@types/mysql": "2.15.27",

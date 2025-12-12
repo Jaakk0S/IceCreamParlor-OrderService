@@ -5,6 +5,7 @@ import { initializeTestData, testCone, testFlavor, testProduct, testTopping } fr
 import { createServer } from '#src/app';
 import supertest from 'supertest';
 import { killDbConnection } from '#src/db/connection';
+import log from '#root/src/utils/logger';
 
 const mockFetch = (productFound: boolean, coneFound: boolean, flavorFound: boolean, toppingFound: boolean) => {
 
@@ -92,7 +93,7 @@ describe("POST /order/v1/place", () => {
         };
         await supertest(createServer()).post(`/order/v1/place`).send(payload)
             .expect(409)
-            .catch(e => console.log(e.message));
+            .catch(e => log.info(e.message));
     });
 
     test("Should return 201 with a valid order of product ids", async () => {

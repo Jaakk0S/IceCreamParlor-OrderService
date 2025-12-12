@@ -18,14 +18,17 @@ export const toppingDTOSchema = z.object({
 });
 
 export const customProductDTOSchema = z.object({
-    name: z.string().optional(),
     flavor: flavorDTOSchema,
     cone: coneDTOSchema,
     toppings: z.array(toppingDTOSchema).optional()
 });
 
 export const existingProductDTOSchema = z.object({
-    id: z.number()
+    id: z.number(),
+    name: z.string().optional(),
+    flavor: flavorDTOSchema.optional(),
+    cone: coneDTOSchema.optional(),
+    toppings: z.array(toppingDTOSchema).optional()
 });
 
 export const orderDTOSchema = z.object({

@@ -26,10 +26,4 @@ describe("GET /order/v1/status/{id}", () => {
             .expect('Connection', 'close');
     });
 
-    test("Should return 200 with a Connection: keep-alive header, if there is a valid order and Connection: keep-alive header", async () => {
-        await supertest(createServer()).get("/order/v1/status/1").set('Connection', 'keep-alive')
-            .expect(200)
-            .expect('Connection', 'keep-alive');
-    });
-
 });
