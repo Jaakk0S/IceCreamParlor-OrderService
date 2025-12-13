@@ -5,6 +5,8 @@
     // Tell ts-node CLI to install the --loader automatically, explained below
     "esm": true
   },
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules", ".vscode"],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Node",

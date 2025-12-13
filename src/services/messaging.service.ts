@@ -1,10 +1,10 @@
-import { AsyncMessage, Connection, Publisher } from 'rabbitmq-client'
+import { Connection } from 'rabbitmq-client'
 import * as models from "#src/db/models";
 import log from "#src/utils/logger";
-import { writeAllOrdersToStreams, updateOrderStatus } from './order.service';
+import { writeAllOrdersToStreams, updateOrderStatus } from '#src/services/order.service';
 
 let rabbitmq: Connection;
-let publisher: Publisher;
+let publisher;
 
 export interface OrderStatusMessage {
     id: number,
@@ -28,7 +28,7 @@ export const initializeMessaging = () => {
         qos: { prefetchCount: 1 }
         //exchanges: [{ exchange: 'order_status', type: 'topic' }],
         //queueBindings: [{ exchange: 'my-events', routingKey: 'users.*' }],
-    }, async (msg: AsyncMessage) => {
+    }, async (msg) => {
         log.info('received status update: ' + msg.body);
         let message = JSON.parse(msg.body) as OrderStatusMessage;
         updateOrderStatus(message.id, message.status);

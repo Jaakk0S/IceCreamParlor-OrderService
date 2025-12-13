@@ -6,7 +6,7 @@ import * as models from "#src/db/models";
 import log from "#src/utils/logger";
 import * as menuService from "#src/services/menu.service"
 import { toDAO } from '#src/services/daos/daos';
-import { writeOrderToMessaging } from './messaging.service';
+import { writeOrderToMessaging } from '#src/services/messaging.service';
 
 
 export const connections = new Map<express.Request, express.Response>();

@@ -5,8 +5,7 @@ import log from "#src/utils/logger";
 import routes from "#src/routes"
 import { getDbConnection } from "#src/db/connection";
 import { tableCreate, tableDrop, resetAutoIncrement } from "#src/db/iceCreamOrder.sql";
-import { table } from "console";
-import { initializeMessaging } from "./services/messaging.service";
+import { initializeMessaging } from "#src/services/messaging.service";
 
 export const createServer = (): express.Application => {
   dotenv.config();
