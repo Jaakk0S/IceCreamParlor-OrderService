@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import log from "#root/src/utils/logger";
+import log from "#src/utils/logger";
 import * as app from "#src/app";
 
 app.createServer();

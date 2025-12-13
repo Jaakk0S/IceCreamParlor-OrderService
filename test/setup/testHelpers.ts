@@ -4,7 +4,7 @@ import { resetAutoIncrement } from "#src/db/iceCreamOrder.sql";
 import { ConeDAO, FlavorDAO, ProductDAO, ToppingDAO } from "#src/services/daos/daos";
 import * as models from "#src/db/models"
 import iconv from 'iconv-lite';
-import log from "#root/src/utils/logger";
+import log from "#src/utils/logger";
 
 let orderId = 1;
 let productId = 1;
@@ -56,7 +56,7 @@ export const genericFetchMock = (product: ProductDAO, cone: ConeDAO, flavor: Fla
             }
             resolve(response);
         });
-    });
+    }) as jest.Mock;
 };
 
 export function testOrder(): models.Order {

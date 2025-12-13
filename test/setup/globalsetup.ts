@@ -1,19 +1,21 @@
 // @ts-check
 
-import { MySqlContainer } from "@testcontainers/mysql";
+import { MySqlContainer, StartedMySqlContainer } from "@testcontainers/mysql";
 import { getDbConnection } from "#src/db/connection";
 import { tableCreate } from "#src/db/iceCreamOrder.sql";
 import dotenv from "dotenv";
-import log from "#root/src/utils/logger";
+import log from "#src/utils/logger";
 
 const MYSQL_DOCKER_IMAGE = "mysql:9.5.0";
+
+export let testContainer: StartedMySqlContainer;
 
 export default async function globalSetup() {
     dotenv.config();
     if (process.env.orderservice_spinup_test_container == "true") {
         log.info("Starting MySQL test container");
         let container = await new MySqlContainer(MYSQL_DOCKER_IMAGE).start();
-        globalThis.TestContainer = container;
+        testContainer = container;
         process.env.mysql_host = container.getHost();
         process.env.mysql_port = "" + container.getPort();
         process.env.mysql_database = container.getDatabase();

@@ -5,7 +5,7 @@ import { initializeTestData, testCone, testFlavor, testProduct, testTopping } fr
 import { createServer } from '#src/app';
 import supertest from 'supertest';
 import { killDbConnection } from '#src/db/connection';
-import log from '#root/src/utils/logger';
+import log from '#src/utils/logger';
 
 const mockFetch = (productFound: boolean, coneFound: boolean, flavorFound: boolean, toppingFound: boolean) => {
 

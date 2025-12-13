@@ -1,7 +1,7 @@
 import e from "express";
 import { ZodObject } from "zod";
 import { fromError } from "zod-validation-error";
-import log from "#root/src/utils/logger";
+import log from "#src/utils/logger";
 
 export const validate = (schema: ZodObject) => (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {

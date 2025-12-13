@@ -4,18 +4,16 @@
   "type": "module",
   "private": true,
   "imports": {
-    "#root/*": "./*.ts",
     "#src/*": "./src/*.ts",
     "#test/*": "./test/*.ts",
-    "#prod_root/*": "./dist/*.js",
-    "#prod_src/*": "./dist/src/*.js"
+    "#prod_src/*": "./dist/*.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "better-npm-run dev",
     "test": "better-npm-run test",
     "test-nopretty": "better-npm-run test-nopretty",
-    "build": "tsc && find dist -name '*.js'|xargs sed -i -e 's/#root/#prod_root/g' -e 's/#src/#prod_src/g'",
+    "build": "tsc && find dist -name '*.js'|xargs sed -i -e 's/#src/#prod_src/g'",
     "start": "better-npm-run prod"
   },
   "betterScripts": {
