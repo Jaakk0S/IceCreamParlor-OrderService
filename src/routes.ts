@@ -10,7 +10,7 @@ import { placeOrderSchema } from "#src/validation/dtoSchemas";
 const whitelist: string[] = process.env.cors_whitelist.split(',');
 const corsOptions = {
     origin: function (origin, callback) {
-        let allowAll: boolean = process.env.NODE_ENV == "test" || process.env.NODE_ENV == "dev";
+        let allowAll: boolean = false;// process.env.NODE_ENV == "test" || process.env.NODE_ENV == "dev";
         var originIsWhitelisted = allowAll ? true : whitelist.indexOf(origin) !== -1;
         console.log(originIsWhitelisted);
         callback(null, originIsWhitelisted);
@@ -18,7 +18,6 @@ const corsOptions = {
 }
 
 function routes(app: express.Application) {
-    cors
     app.get('/order/v1/healthcheck', cors(corsOptions), (req: express.Request, res: express.Response) => res.sendStatus(200));
     app.get('/order/v1/status/:orderId', cors(corsOptions), orderStatusHandler);
     app.get('/order/v1/stream', cors(corsOptions), orderStreamHandler);

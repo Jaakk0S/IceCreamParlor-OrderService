@@ -18,7 +18,7 @@
   },
   "betterScripts": {
     "dev": {
-      "command": "ts-node-esm ./bin/www.ts | pino-pretty",
+      "command": "ts-node-esm ./src/www.ts | pino-pretty",
       "env": {
         "NODE_ENV": "dev"
       }
