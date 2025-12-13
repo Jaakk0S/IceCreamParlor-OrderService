@@ -38,7 +38,7 @@
       }
     },
     "prod": {
-      "command": "node ./dist/bin/www",
+      "command": "node ./dist/www",
       "env": {
         "NODE_ENV": "prod"
       }
