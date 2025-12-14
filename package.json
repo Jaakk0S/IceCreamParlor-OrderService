@@ -6,7 +6,7 @@
   "imports": {
     "#src/*": "./src/*.ts",
     "#test/*": "./test/*.ts",
-    "#prod_src/*": "./dist/*.js"
+    "#prod_src/*": "./dist/src/*.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -36,7 +36,7 @@
       }
     },
     "prod": {
-      "command": "node ./dist/www",
+      "command": "node ./dist/src/www",
       "env": {
         "NODE_ENV": "prod"
       }

@@ -24,6 +24,7 @@ RUN npm run build
 
 
 
+
 FROM build AS production
 
 RUN rm -rf dist/test
