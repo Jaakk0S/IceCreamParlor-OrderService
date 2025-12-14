@@ -10,8 +10,7 @@ import { placeOrderSchema } from "#src/validation/dtoSchemas";
 const whitelist: string[] = process.env.cors_whitelist.split(',');
 const corsOptions = {
     origin: function (origin, callback) {
-        let allowAll: boolean = false;// process.env.NODE_ENV == "test" || process.env.NODE_ENV == "dev";
-        var originIsWhitelisted = allowAll ? true : whitelist.indexOf(origin) !== -1;
+        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
         console.log(originIsWhitelisted);
         callback(null, originIsWhitelisted);
     }

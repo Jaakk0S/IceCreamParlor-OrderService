@@ -43,28 +43,24 @@ export async function placeOrder(order: models.Order): Promise<models.Order> {
     return new Promise(function (resolve, reject) {
         let products: models.Product[] = JSON.parse(order.products);
         Promise.all(products.map(p => {
-            // If it has an ID, retrieve the product from MenuService
-            if (p.id)
-                return menuService.getProduct(p);
-            return p;
-        }))
-            .then(values => {
-                order.products = JSON.stringify(values);
-                order.status = 'placed';
-                order.createdAt = new Date().toISOString();
-                order.updatedAt = new Date().toISOString();
-                getDbConnection().insert(order).into('ICECREAM_ORDER').then(data => {
-                    writeAllOrdersToStreams();
-                    writeOrderToMessaging(order);
-                    resolve(order); // return updated DAO
-                }).catch(e => {
-                    log.error(e.message);
-                    reject(e.message);
-                });
-            }).catch(err => { // if one of the menuService.getProduct()s fails
-                log.error(err);
-                reject(err);
+            return menuService.getProduct(p);
+        })).then(values => {
+            order.products = JSON.stringify(values);
+            order.status = 'placed';
+            order.createdAt = new Date().toISOString();
+            order.updatedAt = new Date().toISOString();
+            getDbConnection().insert(order).into('ICECREAM_ORDER').then(data => {
+                writeAllOrdersToStreams();
+                writeOrderToMessaging(order);
+                resolve(order); // return updated DAO
+            }).catch(e => {
+                log.error(e.message);
+                reject(e.message);
             });
+        }).catch(err => { // if one of the menuService.getProduct()s fails
+            log.error(err);
+            reject(err);
+        });
     });
 }
 

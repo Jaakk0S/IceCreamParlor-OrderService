@@ -58,10 +58,10 @@ describe("placeOrder(object)", () => {
             prodArr.forEach(prod => {
                 expect(prod.id).toEqual(333);
                 expect(prod.name).toEqual("Great product");
-                expect(prod.flavor.name).toEqual("Great flavor");
-                expect(prod.cone.name).toEqual("Great cone");
-                expect(prod.toppings.length).toEqual(1);
-                prod.toppings.forEach((topp: Topping) => {
+                expect(prod.flavor!.name).toEqual("Great flavor");
+                expect(prod.cone!.name).toEqual("Great cone");
+                expect(prod.toppings!.length).toEqual(1);
+                prod.toppings!.forEach((topp: Topping) => {
                     expect(topp.name).toEqual("Great topping");
                 });
             });
@@ -101,10 +101,10 @@ describe("placeOrder(object)", () => {
             let prodArr: Product[] = JSON.parse(result.products);
             prodArr.forEach(prod => {
                 expect(prod.name).toEqual("Custom");
-                expect(prod.flavor.name).toEqual("Lovely flavor");
-                expect(prod.cone.name).toEqual("Lovely cone");
-                expect(prod.toppings.length).toEqual(2);
-                prod.toppings.forEach((topp: Topping) => {
+                expect(prod.flavor!.name).toEqual("Lovely flavor");
+                expect(prod.cone!.name).toEqual("Lovely cone");
+                expect(prod.toppings!.length).toEqual(2);
+                prod.toppings!.forEach((topp: Topping) => {
                     expect(topp.name).toEqual("Lovely topping");
                 });
             });

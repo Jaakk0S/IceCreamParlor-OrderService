@@ -16,7 +16,6 @@ const mockFetch = (productFound: boolean, coneFound: boolean, flavorFound: boole
         let returnJson: object;
 
         return new Promise(function (resolve, reject) {
-
             // fetch() will return test json based on url, or will return 404 if the item is not found
             if (url.includes("product")) {
                 if (!productFound)

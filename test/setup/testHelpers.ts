@@ -5,6 +5,7 @@ import { ConeDAO, FlavorDAO, ProductDAO, ToppingDAO } from "#src/services/daos/d
 import * as models from "#src/db/models"
 import iconv from 'iconv-lite';
 import log from "#src/utils/logger";
+import { publisher, rabbitmq } from "#src/services/messaging.service";
 
 let orderId = 1;
 let productId = 1;
@@ -30,10 +31,19 @@ export const initializeTestData = async () => {
     });
 };
 
-export const genericFetchMock = (product: ProductDAO, cone: ConeDAO, flavor: FlavorDAO, topping: ToppingDAO) => {
+export const mockMessaging = () => {
+    const mockConsumer = jest.fn().mockImplementation(function () { });
+    rabbitmq.createConsumer = mockConsumer.bind(rabbitmq);
+    const mockSend = jest.fn().mockImplementation(function (a: any, b: any) { });
+    publisher.send = mockSend.bind(publisher);
+    jest.mock('#src/db/connection', () => ({ initializeMessaging: () => null }));
+    jest.mock('#src/db/connection', () => ({ writeOrderToMessaging: (order: Order) => null }));
+}
+
+export const genericFetchMock = (product: ProductDAO | null, cone: ConeDAO | null, flavor: FlavorDAO | null, topping: ToppingDAO | null) => {
     global.fetch = jest.fn((url: string) => {
 
-        let returnJson: object;
+        let returnJson: object | null;
 
         // fetch() will return test json based on url
 

@@ -2,10 +2,15 @@
 
 import * as menuService from "#src/services/menu.service";
 import { describe, jest, test } from '@jest/globals';
-import { genericFetchMock, initializeTestData } from "#test/setup/testHelpers";
+import { genericFetchMock, initializeTestData, mockMessaging } from "#test/setup/testHelpers";
 import { killDbConnection } from "#src/db/connection";
+import { Order } from "#src/db/models";
 
 describe("menuApiGet(path, id)", () => {
+
+    beforeEach(() => {
+        //mockMessaging();
+    });
 
     afterEach(() => {
         jest.clearAllMocks();
