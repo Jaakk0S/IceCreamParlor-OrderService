@@ -15,7 +15,7 @@ COPY ./ ./
 FROM base AS build
 
 RUN npm ci --omit=dev
-RUN npm i typescript
+RUN npm i -g typescript
 RUN npm i -D @types/node
 RUN if [[ -z "$omit_tests" ]] ; then npm run test; fi
 RUN npm cache clean --force
