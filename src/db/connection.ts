@@ -15,6 +15,17 @@ export const getDbConnection = (): knex.Knex => {
         password: process.env.mysql_password,
         database: process.env.mysql_database,
       },
+      acquireConnectionTimeout: 1000000,
+      pool: {
+        min: 0,
+        max: 4,
+        acquireTimeoutMillis: 300000,
+        createTimeoutMillis: 300000,
+        destroyTimeoutMillis: 300000,
+        idleTimeoutMillis: 30000,
+        reapIntervalMillis: 1000,
+        createRetryIntervalMillis: 2000
+      }
       //debug: true
     });
 
