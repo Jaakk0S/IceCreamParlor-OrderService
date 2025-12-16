@@ -1,7 +1,7 @@
 import { AsyncMessage, Channel, Connection } from 'rabbitmq-client'
 import * as models from "#src/db/models";
 import log from "#src/utils/logger";
-import { updateOrderStatus } from './order.service';
+import { updateOrderStatus } from '#src/services/order.service';
 
 export let rabbitmq: Connection;
 export let publisher;
