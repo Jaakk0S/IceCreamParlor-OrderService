@@ -1,7 +1,7 @@
-import { Connection } from 'rabbitmq-client'
+import { AsyncMessage, Channel, Connection } from 'rabbitmq-client'
 import * as models from "#src/db/models";
 import log from "#src/utils/logger";
-import { writeAllOrdersToStreams, updateOrderStatus } from '#src/services/order.service';
+import { updateOrderStatus } from './order.service';
 
 export let rabbitmq: Connection;
 export let publisher;
@@ -26,9 +26,17 @@ export const initializeMessaging = () => {
         })
 
         if (process.env.NODE_ENV == "prod") {
-            const orderStatusConsumer = rabbitmq.createConsumer({
+            rabbitmq.acquire().then(channel => {
+                channel.basicConsume({ exclusive: true }, (msg: AsyncMessage) => {
+                    log.info('received status update: ' + msg.body);
+                    let message = JSON.parse(msg.body) as OrderStatusMessage;
+                    updateOrderStatus(message.id, message.status);
+                    channel.basicAck({ deliveryTag: msg.deliveryTag, multiple: false });
+                });
+            })
+            /*const orderStatusConsumer = rabbitmq.createConsumer({
                 queue: 'order_status',
-                queueOptions: { durable: true },
+                queueOptions: { durable: true, passive: true },
                 qos: { prefetchCount: 1 }
                 //exchanges: [{ exchange: 'order_status', type: 'topic' }],
                 //queueBindings: [{ exchange: 'my-events', routingKey: 'users.*' }],
@@ -36,7 +44,7 @@ export const initializeMessaging = () => {
                 log.info('received status update: ' + msg.body);
                 let message = JSON.parse(msg.body) as OrderStatusMessage;
                 updateOrderStatus(message.id, message.status);
-            });
+            });*/
 
             publisher = rabbitmq.createPublisher({
                 confirm: true,
