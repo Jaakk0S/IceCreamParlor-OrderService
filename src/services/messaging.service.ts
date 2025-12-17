@@ -58,7 +58,7 @@ export const initializeMessaging = () => {
 export const writeOrderToMessaging = async (order: models.Order) => {
     if (publisher) {
         await publisher.send('placed_products', order);
-        await publisher.send('order_status', order);
+        await publisher.send('order_status', { 'id': order.id, 'status': order.status });
     }
 }
 
