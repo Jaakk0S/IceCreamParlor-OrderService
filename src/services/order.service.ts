@@ -49,7 +49,8 @@ export async function placeOrder(order: models.Order): Promise<models.Order> {
             order.status = 'placed';
             order.createdAt = new Date().toISOString();
             order.updatedAt = new Date().toISOString();
-            getDbConnection().insert(order).into('ICECREAM_ORDER').then(data => {
+            getDbConnection().insert(order, 'id').into('ICECREAM_ORDER').returning('id').then(data => {
+                order.id = data[0];
                 writeAllOrdersToStreams();
                 writeOrderToMessaging(order);
                 resolve(order); // return updated DAO
