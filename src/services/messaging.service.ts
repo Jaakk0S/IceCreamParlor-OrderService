@@ -28,7 +28,7 @@ export const initializeMessaging = () => {
         if (process.env.NODE_ENV == "prod") {
             rabbitmq.acquire().then(channel => {
                 channel.basicConsume({ queue: 'order_status', exclusive: true }, (msg: AsyncMessage) => {
-                    log.info('received status update: ' + msg.body);
+                    log.info('received status update: ' + JSON.stringify(msg.body));
                     let message = JSON.parse(msg.body) as OrderStatusMessage;
                     updateOrderStatus(message.id, message.status);
                     channel.basicAck({ deliveryTag: msg.deliveryTag, multiple: false });
