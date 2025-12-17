@@ -6,7 +6,7 @@ import * as models from "#src/db/models";
 import log from "#src/utils/logger";
 import * as menuService from "#src/services/menu.service"
 import { toDAO } from '#src/services/daos/daos';
-import { writeOrderToMessaging } from '#src/services/messaging.service';
+import { writePlacedOrderToMessaging } from '#src/services/messaging.service';
 
 
 export const connections = new Map<express.Request, express.Response>();
@@ -49,10 +49,10 @@ export async function placeOrder(order: models.Order): Promise<models.Order> {
             order.status = 'placed';
             order.createdAt = new Date().toISOString();
             order.updatedAt = new Date().toISOString();
-            getDbConnection().insert(order, 'id').into('ICECREAM_ORDER').returning('id').then(data => {
+            getDbConnection().insert(order, 'id').into('ICECREAM_ORDER').then(data => {
                 order.id = data[0];
                 writeAllOrdersToStreams();
-                writeOrderToMessaging(order);
+                writePlacedOrderToMessaging(order);
                 resolve(order); // return updated DAO
             }).catch(e => {
                 log.error(e.message);
