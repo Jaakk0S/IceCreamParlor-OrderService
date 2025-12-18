@@ -1,40 +1,23 @@
 // @ts-check
 
-import * as express from 'express';
 import { getDbConnection } from "#src/db/connection";
 import * as models from "#src/db/models";
 import log from "#src/utils/logger";
 import * as menuService from "#src/services/menu.service"
-import { toDAO } from '#src/services/daos/daos';
 import { writePlacedOrderToMessaging } from '#src/services/messaging.service';
+import { orderUpdated } from '../controllers/order.stream.controller';
 
-
-export const activeLongPolls = new Map<express.Request, express.Response>();
 
 export const updateOrderStatus = (id: number, status: string) => {
     getOrder(id).then(o => {
         o.status = status;
         getDbConnection().update(o).into('ICECREAM_ORDER').then(data => {
-            writeAllOrdersToAllLongPollers();
+            orderUpdated();
         }).catch(e => {
             log.error(e.message);
         });
     }).catch(e => {
         log.error(e.message);
-    });
-}
-
-/*
-    Writes all active orders to all active HTTP requests, then clears those.
-
-    NOTE: this writes ALL orders, also delievered ones, so, the data gets quite big in time and is suitable just for a small demo app.
-*/
-export const writeAllOrdersToAllLongPollers = () => {
-    getAllOrders().then(orders => {
-        for (let [req, res] of activeLongPolls.entries()) {
-            res.json(orders.map(o => toDAO(o))).send(200);
-        }
-        activeLongPolls.clear();
     });
 }
 
@@ -53,8 +36,8 @@ export async function placeOrder(order: models.Order): Promise<models.Order> {
             order.updatedAt = new Date().toISOString();
             getDbConnection().insert(order).into('ICECREAM_ORDER').then(data => {
                 order.id = data[0];
-                writeAllOrdersToAllLongPollers();
                 writePlacedOrderToMessaging(order);
+                orderUpdated();
                 resolve(order); // return updated DAO
             }).catch(e => {
                 log.error(e.message);
