@@ -5,7 +5,7 @@ import * as models from "#src/db/models";
 import log from "#src/utils/logger";
 import * as menuService from "#src/services/menu.service"
 import { writePlacedOrderToMessaging } from '#src/services/messaging.service';
-import { orderUpdated } from '../controllers/order.stream.controller';
+import { orderUpdated } from '#src/controllers/order.stream.controller';
 
 
 export const updateOrderStatus = (id: number, status: string) => {
