@@ -1,10 +1,10 @@
 // @ts-check
 
 import * as express from 'express';
-import log from "#src/utils/logger";
-import { getAllOrders } from '../services/order.service';
-import { toDAO } from '../services/daos/daos';
 import waitUntil from 'async-wait-until';
+import log from "#src/utils/logger";
+import { getAllOrders } from '#src/services/order.service';
+import { toDAO } from '#src/services/daos/daos';
 
 let _orderUpdateCount: number = 0;
 
