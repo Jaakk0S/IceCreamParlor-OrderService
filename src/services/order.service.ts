@@ -32,8 +32,7 @@ export const updateOrderStatus = (id: number, status: string) => {
 export const writeAllOrdersToAllLongPollers = () => {
     getAllOrders().then(orders => {
         for (let [req, res] of activeLongPolls.entries()) {
-            res.write(JSON.stringify(orders.map(o => toDAO(o))));
-            res.send(200);
+            res.json(orders.map(o => toDAO(o))).send(200);
         }
         activeLongPolls.clear();
     });
