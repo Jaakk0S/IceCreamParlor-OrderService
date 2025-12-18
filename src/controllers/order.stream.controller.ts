@@ -22,6 +22,6 @@ export async function orderStatusLongPollingHandler(req: express.Request, res: e
     });
     await waitUntil(() => startCount != _orderUpdateCount);
     getAllOrders().then(orders => {
-        res.json(orders.map(o => toDAO(o))).send(200);
+        res.json(orders.map(o => toDAO(o)));
     });
 }
