@@ -35,8 +35,8 @@ export const writeAllOrdersToAllLongPollers = () => {
             res.write(JSON.stringify(orders.map(o => toDAO(o))));
             res.send(200);
         }
+        activeLongPolls.clear();
     });
-    activeLongPolls.clear();
 }
 
 export async function placeOrder(order: models.Order): Promise<models.Order> {
