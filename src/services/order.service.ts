@@ -9,13 +9,13 @@ import { toDAO } from '#src/services/daos/daos';
 import { writePlacedOrderToMessaging } from '#src/services/messaging.service';
 
 
-export const connections = new Map<express.Request, express.Response>();
+export const activeLongPolls = new Map<express.Request, express.Response>();
 
 export const updateOrderStatus = (id: number, status: string) => {
     getOrder(id).then(o => {
         o.status = status;
         getDbConnection().update(o).into('ICECREAM_ORDER').then(data => {
-            writeAllOrdersToStreams();
+            writeAllOrdersToAllLongPollers();
         }).catch(e => {
             log.error(e.message);
         });
@@ -25,15 +25,18 @@ export const updateOrderStatus = (id: number, status: string) => {
 }
 
 /*
-    Writes all active orders to all active HTTP streams.
+    Writes all active orders to all active HTTP requests, then clears those.
 
     NOTE: this writes ALL orders, also delievered ones, so, the data gets quite big in time and is suitable just for a small demo app.
 */
-export const writeAllOrdersToStreams = () => {
+export const writeAllOrdersToAllLongPollers = () => {
     getAllOrders().then(orders => {
-        for (let [req, res] of connections.entries())
+        for (let [req, res] of activeLongPolls.entries()) {
             res.write(JSON.stringify(orders.map(o => toDAO(o))));
+            res.send(200);
+        }
     });
+    activeLongPolls.clear();
 }
 
 export async function placeOrder(order: models.Order): Promise<models.Order> {
@@ -49,9 +52,9 @@ export async function placeOrder(order: models.Order): Promise<models.Order> {
             order.status = 'placed';
             order.createdAt = new Date().toISOString();
             order.updatedAt = new Date().toISOString();
-            getDbConnection().insert(order, 'id').into('ICECREAM_ORDER').then(data => {
+            getDbConnection().insert(order).into('ICECREAM_ORDER').then(data => {
                 order.id = data[0];
-                writeAllOrdersToStreams();
+                writeAllOrdersToAllLongPollers();
                 writePlacedOrderToMessaging(order);
                 resolve(order); // return updated DAO
             }).catch(e => {

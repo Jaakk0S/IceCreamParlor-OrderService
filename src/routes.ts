@@ -4,7 +4,7 @@ import * as express from "express";
 import cors from "cors";
 import { validate } from "#src/validation/validateResource";
 import { orderStatusHandler, placeOrderHandler } from "#src/controllers/order.controller";
-import { orderStreamHandler } from "#src/controllers/order.stream.controller";
+import { orderStatusLongPollingHandler } from "#src/controllers/order.stream.controller";
 import { placeOrderSchema } from "#src/validation/dtoSchemas";
 
 const whitelist: string[] = process.env.cors_whitelist.split(',');
@@ -19,7 +19,7 @@ const corsOptions = {
 function routes(app: express.Application) {
     app.get('/order/v1/healthcheck', cors(corsOptions), (req: express.Request, res: express.Response) => res.sendStatus(200));
     app.get('/order/v1/status/:orderId', cors(corsOptions), orderStatusHandler);
-    app.get('/order/v1/stream', cors(corsOptions), orderStreamHandler);
+    app.get('/order/v1/stream', cors(corsOptions), orderStatusLongPollingHandler);
     app.post('/order/v1/place', cors(corsOptions), validate(placeOrderSchema), placeOrderHandler);
 }
 
