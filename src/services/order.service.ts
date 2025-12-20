@@ -11,7 +11,7 @@ import { orderUpdated } from '#src/controllers/order.stream.controller';
 export const updateOrderStatus = (id: number, status: string) => {
     getOrder(id).then(o => {
         o.status = status;
-        getDbConnection().update(o).into('ICECREAM_ORDER').then(data => {
+        getDbConnection().update('status', status).into('ICECREAM_ORDER').where('id', '=', id).then(data => {
             orderUpdated();
         }).catch(e => {
             log.error(e.message);
