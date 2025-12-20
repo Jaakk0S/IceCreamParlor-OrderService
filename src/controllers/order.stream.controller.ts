@@ -16,6 +16,7 @@ export const orderUpdated = () => {
     Waits until any order changes status. Then returns all orders.
 */
 export async function orderStatusLongPollingHandler(req: express.Request, res: express.Response) {
+    req.setTimeout(1000000);
     let startCount: number = _orderUpdateCount;
     req.on('close', () => {
         log.info('Client disconnected');

@@ -34,17 +34,6 @@ export const initializeMessaging = () => {
                     channel.basicAck({ deliveryTag: msg.deliveryTag, multiple: false });
                 });
             })
-            /*const orderStatusConsumer = rabbitmq.createConsumer({
-                queue: 'order_status',
-                queueOptions: { durable: true, passive: true },
-                qos: { prefetchCount: 1 }
-                //exchanges: [{ exchange: 'order_status', type: 'topic' }],
-                //queueBindings: [{ exchange: 'my-events', routingKey: 'users.*' }],
-            }, async (msg) => {
-                log.info('received status update: ' + msg.body);
-                let message = JSON.parse(msg.body) as OrderStatusMessage;
-                updateOrderStatus(message.id, message.status);
-            });*/
 
             publisher = rabbitmq.createPublisher({
                 confirm: true,
