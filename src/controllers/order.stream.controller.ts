@@ -21,7 +21,7 @@ export async function orderStatusLongPollingHandler(req: express.Request, res: e
     req.on('close', () => {
         log.info('Client disconnected');
     });
-    await waitUntil(() => startCount != _orderUpdateCount);
+    await waitUntil(() => startCount != _orderUpdateCount, { timeout: 1000000 });
     getAllOrders().then(orders => {
         res.json(orders.map(o => toDAO(o)));
     });
