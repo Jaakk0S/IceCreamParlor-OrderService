@@ -45,7 +45,7 @@ export const initializeMessaging = () => {
 
 export const writePlacedOrderToMessaging = async (order: models.Order) => {
     if (publisher) {
-        await publisher.send('placed_orders_exchange', 'placed_orders', order);
+        await publisher.send({ exchange: 'placed_orders_exchange', routingKey: 'placed_orders' }, order);
     }
 }
 
