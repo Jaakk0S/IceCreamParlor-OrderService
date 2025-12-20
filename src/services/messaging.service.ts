@@ -38,7 +38,6 @@ export const initializeMessaging = () => {
             publisher = rabbitmq.createPublisher({
                 confirm: true,
                 maxAttempts: 2
-                //exchanges: [{ exchange: 'placed_orders', type: 'topic' }]
             });
         }
     }
@@ -46,7 +45,7 @@ export const initializeMessaging = () => {
 
 export const writePlacedOrderToMessaging = async (order: models.Order) => {
     if (publisher) {
-        await publisher.send('placed_orders', order);
+        await publisher.send('placed_orders_exchange', 'placed_orders', order);
     }
 }
 
