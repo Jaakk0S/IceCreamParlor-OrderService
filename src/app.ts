@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
 import log from "#src/utils/logger";
 import routes from "#src/routes"
@@ -20,7 +19,6 @@ export const createServer = (): express.Application => {
     .use(express.json())
     .use(express.urlencoded({ extended: true }));
 
-  app.use(cors());
   routes(app);
 
   initializeMessaging();
